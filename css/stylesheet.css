@@ -1,0 +1,118 @@
+:root {
+	/* Tab Bar */
+	--tab-bar-height: 40px;
+	/* --- */
+	--tab-bar-color: lightgray;
+
+	/* Tab */
+	--tab-height: calc(var(--tab-bar-height) - 6px);
+	--tab-max-width: 100px;
+	--tab-min-width: 40px;
+	--tab-padding: 10px;
+	--tab-gap: 2px;
+	/* --- */
+	--tab-color: transparent;
+	--tab-hover-color: darkgray;
+	--tab-select-color: white;
+}
+
+body {
+	margin: 0;
+}
+
+div.panel {
+	display: block;
+
+	height: 400px;
+	width: 600px;
+
+	border: 1px solid lightgray;
+
+	background-color: transparent;
+}
+
+div.tab-bar {
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: flex-end;
+	gap: var(--tab-gap);
+
+	height: var(--tab-bar-height);
+	width: 100%;
+}
+
+div.tab {
+	display: block;
+
+	height: var(--tab-height);
+	max-width: var(--tab-max-width);
+	min-width: var(--tab-min-width);
+	flex-grow: 1;
+
+	text-indent: var(--tab-padding);
+
+	align-content: center;
+
+	user-select: none;
+}
+
+div.ghost-tab {
+	display: block;
+}
+
+div.button-tab-add {
+	display: block;
+
+	height: var(--tab-height);
+	width: var(--tab-height);
+
+	text-align: center;
+	align-content: center;
+	line-height: 100%;
+
+	user-select: none;
+} 
+
+/* Colors and styles */
+div.tab-bar {
+	background-color: var(--tab-bar-color);
+}
+
+div.tab {
+	border-radius: 5px;
+
+	font-family: monospace;
+	font-size: medium;	
+
+	background-color: var(--tab-color);
+
+	&:not(.tab-selected):hover{
+		background-color: var(--tab-hover-color);
+	}
+}
+
+div.tab-selected {
+	border: 1px solid var(--tab-bar-color);
+
+	background-color: white;
+}
+
+div.ghost-tab {
+	border: 1px solid transparent;
+
+	background-color: transparent;
+}
+
+div.button-tab-add {	
+	border-radius: 5px;
+
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: small;
+
+	background-color: var(--tab-color);
+
+	&:hover {
+		background-color: var(--tab-hover-color);
+	}
+}
