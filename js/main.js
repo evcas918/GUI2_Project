@@ -2,9 +2,12 @@ var classTabBar = "tab-bar";
 var classTab = "tab";
 var classGhostTab = "ghost-tab";
 var classTabSelected = "tab-selected";
+var classTabDocumentView = "tab-document-view";
+var classTabDocument = "tab-document";
 
 var dataInitialOffset = "initial-offset";
-var dataParentIndex = "parent-index"
+var dataParentIndex = "parent-index";
+var dataLinkedDocument = "linked-document";
 
 var $dragTarget = null;
 
@@ -32,16 +35,6 @@ $.fn.insertIndex = function ($dom, index) {
 }
 
 /**
- * Get the position of a DOM element
- *
- * @param      {DOM element}  $dom    The dom
- * @return     {Array}        The position of the dom
- */
-function position($dom) {
-	return [$dom?.offset().top, $dom?.offset().left];
-}
-
-/**
  * Check if a point is within the bounds of a block
  *
  * @param      {2-element array [y, x]}  pos     The position of the point
@@ -55,12 +48,29 @@ function aabb(pos, $block) {
 		$block?.offset().top <= pos[0] && pos[0] <= $block?.offset().top + $block?.height() );
 }
 
-function tabSelect() {
+/**
+ * Clear a tabs siblings from being selected
+ */
+function tabSiblingsClearSelection() {
+	// Remove selection tab from all sibling tabs
 	$(this)
-		.siblings("div." + classTabSelected).removeClass(classTabSelected);
+		.siblings().removeClass(classTabSelected);
 
+	// Hide the documents associated with all the sibling tabs
+	$(this).parent().siblings("div." + classTabDocumentView)
+		.children().first().detach();
+}
+/**
+ * Make a tab selected
+ */
+function tabSelect() {
+	// Add the selected tab class to the tab
 	$(this)
 		.addClass(classTabSelected);
+
+	// Show the document associated with the tab	
+	$(this).parent().siblings("div." + classTabDocumentView)
+		.append($(this).data(dataLinkedDocument));
 }
 
 /*
@@ -211,9 +221,17 @@ function dragTargetDeselect() {
 			$dragTarget,
 			arrParentData[1]);
 
-		// Also select the first available tab since non will be selected
-		tabSelect
-			.call($dragTarget.data(dataParentIndex)[0].children("div." + classTab).first());
+		// If the tab bar is different
+		if ($dragTarget.data(dataParentIndex)[0].is($dragTarget.parent()) == false) {
+			// Select the first available tab on the old tab bar since none will
+			// be selected
+			tabSelect
+				.call($dragTarget.data(dataParentIndex)[0].children("div." + classTab).first());
+			
+			// Run a tab select on the new bar in order to update the document view
+			tabSelect
+				.call($dragTarget);
+		}
 	}
 
 	// Update the CSS to no longer be in a dragging state
@@ -222,7 +240,8 @@ function dragTargetDeselect() {
 		.css("width", "unset");
 
 	// Make sure that the drag target is the selected tab within its tab bar
-	tabSelect.call($dragTarget);
+	if ($dragTarget.data(dataParentIndex)[0].is($dragTarget.parent()) == false)
+		tabSiblingsClearSelection.call($dragTarget);
 	
 	// Remove the tab from being targeted
 	$dragTarget = null;
@@ -256,9 +275,21 @@ function dragTargetMove() {
 }
 
 $(document).ready(function() {
+	// Prepare all documents by detaching them
+	$("div." + classTabDocument).each(function() {
+		$(this).parent()
+			.data(dataLinkedDocument, $(this).detach());
+	});
+	// Show all active documents
+	$("div." + classTabSelected).each(function() {
+		$(this).parent().siblings("div." + classTabDocumentView)
+			.append($(this).data(dataLinkedDocument));
+	});
+
 	// Bind the mouse down functionality to the tabs themselves in order to be
 	// selected
 	$("div." + classTab)
+		.bind("mousedown", tabSiblingsClearSelection)
 		.bind("mousedown", tabSelect)
 		.bind("mousedown", dragTargetSelect);
 
