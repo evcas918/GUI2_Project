@@ -1,13 +1,18 @@
 var classTabBar = "tab-bar";
 var classTab = "tab";
+var classTabTitle = "tab-title";
 var classGhostTab = "ghost-tab";
 var classTabSelected = "tab-selected";
 var classTabDocumentView = "tab-document-view";
 var classTabDocument = "tab-document";
+var classButtonTabClose = "button-tab-close";
+var classButtonTabAdd = "button-tab-add";
+var classIconClose = "icon-close";
 
 var dataInitialOffset = "initial-offset";
 var dataParentIndex = "parent-index";
 var dataLinkedDocument = "linked-document";
+var dataIsClosing = "is-closing";
 
 var $dragTarget = null;
 
@@ -49,9 +54,46 @@ function aabb(pos, $block) {
 }
 
 /**
+ * Add functionality to all selected tabs
+ *
+ * @param      {DOM elements}  $tabs   The tabs
+ */
+function addTabFunctionality($tabs) {
+	// Prepare all documents by detaching them
+	$tabs.children("div." + classTabDocument).each(function() {
+		$(this).parent()
+			.data(dataLinkedDocument, $(this).detach());
+	});
+	// Show all active documents
+	$tabs.filter("div." + classTabSelected).each(function() {
+		$(this).parent().siblings("div." + classTabDocumentView)
+			.append($(this).data(dataLinkedDocument));
+	});
+
+	// Bind the mouse down functionality to the tabs themselves in order to be
+	// selected
+	$tabs
+		.on("mousedown", checkForClosingEvent)		// If the mouse is over the closing button then prevent the tab from
+		                                      		// being selected.
+		.on("mousedown", tabSiblingsClearSelection)	// Unselect any other tabs in the tab bar.
+		.on("mousedown", tabSelect)					// Select the tab by lighting it up.
+		.on("mousedown", dragTargetSelect)			// Select the tab as a drag target (follow the mouse cursor).
+		.on("mousedown", clearClosingEvent);		// If the tab was marked to be closed then reset that data in case
+		                                    		// the user's cursor is dragged away from the close button.
+
+	// When a tab's close button is successfully clicked, close the tab
+	$tabs.children("div." + classButtonTabClose)
+		.on("click", closeTab);
+}
+
+/**
  * Clear a tabs siblings from being selected
  */
 function tabSiblingsClearSelection() {
+	// Return if the tab is in the process of being closed
+	if ($(this).data(dataIsClosing))
+		return
+
 	// Remove selection tab from all sibling tabs
 	$(this)
 		.siblings().removeClass(classTabSelected);
@@ -60,10 +102,15 @@ function tabSiblingsClearSelection() {
 	$(this).parent().siblings("div." + classTabDocumentView)
 		.children().first().detach();
 }
+
 /**
  * Make a tab selected
  */
 function tabSelect() {
+	// Do not select a tab that is in the process of being closed
+	if ($(this).data(dataIsClosing))
+		return
+
 	// Add the selected tab class to the tab
 	$(this)
 		.addClass(classTabSelected);
@@ -71,6 +118,109 @@ function tabSelect() {
 	// Show the document associated with the tab	
 	$(this).parent().siblings("div." + classTabDocumentView)
 		.append($(this).data(dataLinkedDocument));
+}
+
+/**
+ * Create a new tab
+ *
+ * @param      {string}       title   The title of the tab
+ * @param      {DOM element}  $html   The html to place inside the new document
+ *                                    associated with the tab
+ * @return     {DOM element}  The tab itself
+ */
+function newTab(title, $html) {
+	// Create the new document associated with the tab, placing the desired html
+	// inside the new document
+	$newDocument = 
+		$("<div>")
+			.addClass(classTabDocument)
+			.append($html);
+
+	// Create the new tab and associate it with the new document
+	$newTab = 
+		$("<div>")
+			.addClass(classTab)
+			.append(
+				$("<div>")
+					.addClass(classTabTitle)
+					.append(title)
+			).append(
+				$("<div>")
+					.addClass(classButtonTabClose)
+					.append(
+						$("<div>")
+							.addClass(classIconClose)
+					)
+			).append($newDocument);
+
+	// Add functionality to the tab
+	addTabFunctionality($newTab);
+
+	// Return the tab
+	return $newTab;
+}
+
+/**
+ * Adds a tab to the current tab bar
+ */
+function addTab() {
+	// Create the new tab
+	$newTab = newTab("New Tab", $("<textarea>").attr("placeholder",  "Type Here"));
+
+	// Insert it before the new tab button
+	$(this).before($newTab);
+
+	// Select the new tab
+	tabSiblingsClearSelection.call($newTab);
+	tabSelect.call($newTab);
+}
+
+/*
+ * When called will add closing data to the current tab element to prevent a tab
+ * from being selected if it is going to be closed
+ */
+function checkForClosingEvent() {
+	// If the mouse is hovering over the closing button of the current tab then
+	// raise the closing flag
+	if (aabb([event.pageY, event.pageX], $(this).children("div." + classButtonTabClose).first()))
+		$(this).data(dataIsClosing, true);
+}
+
+/*
+ * Resets the closing data of a tab
+ */
+function clearClosingEvent() {
+	$(this).data(dataIsClosing, false);	
+}
+
+/**
+ * Closes a tab and selects its neighbor if possible
+ */
+function closeTab() {
+	// Find the next tab to possibly select based on neighbors
+	var $prev = $(this).parent().prev("div." + classTab);
+	var $next = $(this).parent().next("div." + classTab);
+	var $newSelected =
+		$prev.length ? $prev : $next;
+
+	// Get the tab bar which the current tab belongs to
+	var $tabBar = $(this).parent().parent();
+
+	// Remove the tab to be closed
+	$(this).parent().remove();
+
+	// If no tabs are currently selected
+	if ($tabBar.children().hasClass(classTabSelected) == false) {
+		// Clear the current document view
+		$tabBar.siblings("div." + classTabDocumentView).children().remove();
+
+		// If there is a tab available to be selcted then select it
+		if ($newSelected.length == 1) {
+			tabSiblingsClearSelection.call($newSelected);
+			tabSelect.call($newSelected);
+		}
+	}
+
 }
 
 /*
@@ -136,7 +286,8 @@ function attemptAddGhostTab($tabBar) {
  * Called once when a tab is selected to be dragged
  */
 function dragTargetSelect() {
-	if ($dragTarget != null)
+	// Do not select a null target or a tab that is in the process of being closed 
+	if ($dragTarget != null || $(this).data(dataIsClosing))
 		return;
 		
 	// Target the tab
@@ -228,6 +379,9 @@ function dragTargetDeselect() {
 			tabSelect
 				.call($dragTarget.data(dataParentIndex)[0].children("div." + classTab).first());
 			
+			// Make sure that the drag target is the selected tab within its tab bar
+			tabSiblingsClearSelection.call($dragTarget);
+
 			// Run a tab select on the new bar in order to update the document view
 			tabSelect
 				.call($dragTarget);
@@ -238,10 +392,6 @@ function dragTargetDeselect() {
 	$dragTarget
 		.css("position", "unset")
 		.css("width", "unset");
-
-	// Make sure that the drag target is the selected tab within its tab bar
-	if ($dragTarget.data(dataParentIndex)[0].is($dragTarget.parent()) == false)
-		tabSiblingsClearSelection.call($dragTarget);
 	
 	// Remove the tab from being targeted
 	$dragTarget = null;
@@ -275,26 +425,15 @@ function dragTargetMove() {
 }
 
 $(document).ready(function() {
-	// Prepare all documents by detaching them
-	$("div." + classTabDocument).each(function() {
-		$(this).parent()
-			.data(dataLinkedDocument, $(this).detach());
-	});
-	// Show all active documents
-	$("div." + classTabSelected).each(function() {
-		$(this).parent().siblings("div." + classTabDocumentView)
-			.append($(this).data(dataLinkedDocument));
-	});
+	// Add functionality to any tabs already included in the html
+	addTabFunctionality($("div." + classTab));
 
-	// Bind the mouse down functionality to the tabs themselves in order to be
-	// selected
-	$("div." + classTab)
-		.bind("mousedown", tabSiblingsClearSelection)
-		.bind("mousedown", tabSelect)
-		.bind("mousedown", dragTargetSelect);
+	// When the new tab button is successfully clicked, add a new tab
+	$("div." + classButtonTabAdd)
+		.on("click", addTab);
 
 	// Bind all other mouse functionality to the entire document
 	$(document)
-		.bind("mouseup", dragTargetDeselect)
-		.bind("mousemove", dragTargetMove);
+		.on("mouseup", dragTargetDeselect)
+		.on("mousemove", dragTargetMove);
 });

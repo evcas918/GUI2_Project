@@ -1,19 +1,25 @@
 :root {
 	/* Tab Bar */
-	--tab-bar-height: 40px;
+	--tab-bar-height: 34px;
 	/* --- */
-	--tab-bar-color: lightgray;
+	--tab-bar-color: hsl(330deg, 4%, 90%);
 
-	/* Tab */
-	--tab-height: calc(var(--tab-bar-height) - 6px);
-	--tab-max-width: 100px;
+	/* Tab and Tab add Button */
+	--tab-height: var(--tab-bar-height);
+	--tab-max-width: 120px;
 	--tab-min-width: 40px;
 	--tab-padding: 10px;
 	--tab-gap: 2px;
 	/* --- */
 	--tab-color: transparent;
-	--tab-hover-color: darkgray;
-	--tab-select-color: white;
+	--tab-hover-color: color-mix(in srgb, black, transparent 90%);
+	--tab-selected-color: white;
+	--tab-selected-drop-shadow: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.5));
+
+	/* Tab Close Button */
+	--button-tab-close-height: calc(var(--tab-height) * 0.7);
+	/* --- */
+	--button-tab-close-hover-color: color-mix(in srgb, black, transparent 90%);
 }
 
 body {
@@ -26,7 +32,7 @@ div.panel {
 	height: 400px;
 	width: 600px;
 
-	border: 1px solid lightgray;
+	border: 1px solid var(--tab-bar-color);
 
 	background-color: transparent;
 }
@@ -39,21 +45,35 @@ div.tab-bar {
 
 	height: var(--tab-bar-height);
 	width: 100%;
+
+	overflow-x: scroll;
+
+	& div.tab-document {
+		visibility: hidden;
+	}
 }
 
 div.tab {
-	display: block;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 
 	height: var(--tab-height);
 	max-width: var(--tab-max-width);
 	min-width: var(--tab-min-width);
 	flex-grow: 1;
 
-	text-indent: var(--tab-padding);
-
-	align-content: center;
+	z-index: 1;
 
 	user-select: none;
+}
+
+div.tab-title {
+	margin-left: var(--tab-padding);
+
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 div.ghost-tab {
@@ -64,14 +84,42 @@ div.button-tab-add {
 	display: block;
 
 	height: var(--tab-height);
-	width: var(--tab-height);
+	min-width: var(--tab-height);
 
-	text-align: center;
-	align-content: center;
-	line-height: 100%;
+	z-index: 1;
 
 	user-select: none;
-} 
+}
+
+div.button-tab-close {
+	display: block;
+
+	height: var(--button-tab-close-height);
+	min-width: var(--button-tab-close-height);
+	margin-right: calc((var(--tab-height) - var(--button-tab-close-height)) * 0.5);
+}
+
+div.tab-document-view {
+	display: block;
+
+	position: relative;
+
+	height: calc(100% - var(--tab-bar-height));
+	width: 100%;
+
+	background-color: transparent;
+}
+
+div.tab-document {
+	display: block;
+
+	position: absolute;
+	top: 0px;
+	left: 0px;
+
+	height: 100%;
+	width: 100%;
+}
 
 /* Colors and styles */
 div.tab-bar {
@@ -92,13 +140,15 @@ div.tab {
 }
 
 div.tab-selected {
-	border: 1px solid var(--tab-bar-color);
+	/*border: 1px solid var(--tab-bar-color);*/
 
-	background-color: white;
+	filter: var(--tab-selected-drop-shadow);
+
+	background-color: var(--tab-selected-color);
 }
 
 div.ghost-tab {
-	border: 1px solid transparent;
+	/*border: 1px solid transparent;*/
 
 	background-color: transparent;
 }
@@ -106,13 +156,70 @@ div.ghost-tab {
 div.button-tab-add {	
 	border-radius: 5px;
 
-	font-family: sans-serif;
-	font-weight: bold;
-	font-size: small;
-
 	background-color: var(--tab-color);
 
 	&:hover {
 		background-color: var(--tab-hover-color);
 	}
+}
+
+div.button-tab-close {
+	border-radius: 5px;
+
+	background-color: transparent;
+
+	&:hover {
+		background-color: var(--button-tab-close-hover-color);
+	};
+}
+
+div.icon-add {
+	height: 100%;
+	width: 100%;
+
+
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: small;
+
+	text-align: center;
+	align-content: center;
+	line-height: 100%;
+
+	&::before {
+		content: "\FF0B";
+	}
+}
+
+div.icon-close {
+	height: 100%;
+	width: 100%;
+
+	font-family: serif;
+	/*font-weight: bold;*/
+	font-size: small;
+
+	text-align: center;
+	align-content: center;
+	line-height: 100%;
+
+	&::before {
+		content: "\00D7";
+	}
+}
+
+textarea {
+	all: unset;
+
+	width: 100%;
+	height: 100%;
+
+	padding-left: 25px;
+
+	font-family: monospace;
+	font-size: large;
+
+	/*caret-color: red;*/
+
+	/*background-color: red;*/
 }
