@@ -38,6 +38,9 @@ $(document).ready(function() {
 		$(this).siblings("div." + classPanelDivider)
 			.off("mousedown")
 			.on("mousedown", panelDividerSelect);
+
+		// Add a working tab bar to the panel
+		$(this).each(addTabBarToPanel);
 	}
 
 	function panelClose() {
@@ -51,8 +54,20 @@ $(document).ready(function() {
 
 		// Select the other region to save
 		var $otherSide = $(this).siblings(desiredClass).first();
+
+
+
+		// Find another panel to combine tabs with
+		var $otherPanel = 
+			$otherSide.hasClass(classPanel) ? $otherSide : $otherSide.find("div." + classPanel).first();
+
+		// Combine the tab bars of the two panels
+		tabBarCombine(
+			$otherPanel.children("div." + classTabBar).first(),
+			$(this).children("div." + classTabBar).first()
+		);
 		
-		// Tall all other panels to resize to accommodate new layout
+		// Tell all other panels to resize to accommodate new layout
 		$(this).parent().find(desiredClass).css(dimension, "100%");
 
 		// Send the other region to be before the parent, before removing the

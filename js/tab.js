@@ -1,21 +1,3 @@
-var classTabBar = "tab-bar";
-var classTab = "tab";
-var classTabTitle = "tab-title";
-var classGhostTab = "ghost-tab";
-var classTabSelected = "tab-selected";
-var classTabDocumentView = "tab-document-view";
-var classTabDocument = "tab-document";
-var classButtonTabClose = "button-tab-close";
-var classButtonTabAdd = "button-tab-add";
-var classIconClose = "icon-close";
-
-var dataInitialOffset = "initial-offset";
-var dataParentIndex = "parent-index";
-var dataLinkedDocument = "linked-document";
-var dataIsClosing = "is-closing";
-
-var $dragTarget = null;
-
 /**
  * Insert a DOM element as a child at a specific index
  *
@@ -39,6 +21,68 @@ $.fn.insertIndex = function ($dom, index) {
 	}
 }
 
+
+var classTab = "tab";
+var classTabTitle = "tab-title";
+var classTabBar = "tab-bar";
+var classGhostTab = "ghost-tab";
+var classTabSelected = "tab-selected";
+var classTabDocument = "tab-document";
+var classTabDocumentView = "tab-document-view";
+var classButtonTabAdd = "button-tab-add";
+var classButtonTabClose = "button-tab-close";
+var classIconAdd = "icon-add";
+var classIconClose = "icon-close";
+
+var dataInitialOffset = "initial-offset";
+var dataParentIndex = "parent-index";
+var dataLinkedDocument = "linked-document";
+var dataIsClosing = "is-closing";
+
+var $dragTarget = null;
+
+
+/**
+ * Combine the tabs of two tab bars
+ *
+ * @param      {DOM element}  $retain  The tab bar which retains its tabs
+ * @param      {DOM element}  $lose    The tab bar which loses its tabs
+ */
+function tabBarCombine($retain, $lose) {
+	// Place the tabs before the tab button
+	$retain.children("div." + classButtonTabAdd)
+		.before(
+			$lose.children("div." + classTab)
+				.removeClass(classTabSelected)
+		);
+}
+
+/**
+ * Adds a tab bar to an empty panel
+ */
+function addTabBarToPanel() {
+	if ($(this).children().length > 0)
+		return;
+
+	// Add the html of a tab bar to panel
+	$(this)
+		.append(
+			$("<div>")
+				.addClass(classTabBar)
+				.append(
+					$("<div>")
+						.addClass(classButtonTabAdd)
+						.append(
+							$("<div>")
+								.addClass(classIconAdd)
+						)
+				).each(addTabBarFunctionality) // then add its functionality
+		).append(
+			$("<div>") // Also add tab document view
+				.addClass(classTabDocumentView)
+		);
+}
+
 /**
  * Check if a point is within the bounds of a block
  *
@@ -55,24 +99,22 @@ function aabb(pos, $block) {
 
 /**
  * Add functionality to all selected tabs
- *
- * @param      {DOM elements}  $tabs   The tabs
  */
-function addTabFunctionality($tabs) {
+function addTabFunctionality() {
 	// Prepare all documents by detaching them
-	$tabs.children("div." + classTabDocument).each(function() {
+	$(this).children("div." + classTabDocument).each(function() {
 		$(this).parent()
 			.data(dataLinkedDocument, $(this).detach());
 	});
 	// Show all active documents
-	$tabs.filter("div." + classTabSelected).each(function() {
+	$(this).filter("div." + classTabSelected).each(function() {
 		$(this).parent().siblings("div." + classTabDocumentView)
 			.append($(this).data(dataLinkedDocument));
 	});
 
 	// Bind the mouse down functionality to the tabs themselves in order to be
 	// selected
-	$tabs
+	$(this)
 		.on("mousedown", checkForClosingEvent)		// If the mouse is over the closing button then prevent the tab from
 		                                      		// being selected.
 		.on("mousedown", tabSiblingsClearSelection)	// Unselect any other tabs in the tab bar.
@@ -82,7 +124,7 @@ function addTabFunctionality($tabs) {
 		                                    		// the user's cursor is dragged away from the close button.
 
 	// When a tab's close button is successfully clicked, close the tab
-	$tabs.children("div." + classButtonTabClose)
+	$(this).children("div." + classButtonTabClose)
 		.on("click", closeTab);
 }
 
@@ -154,7 +196,7 @@ function newTab(title, $html) {
 			).append($newDocument);
 
 	// Add functionality to the tab
-	addTabFunctionality($newTab);
+	$newTab.each(addTabFunctionality);
 
 	// Return the tab
 	return $newTab;
@@ -424,16 +466,25 @@ function dragTargetMove() {
 	});
 }
 
+/**
+ * Adds functionality to the tab bar
+ */
+function addTabBarFunctionality() {
+	$(this).children("div." + classButtonTabAdd)
+		.on("click", addTab);
+}
+
 $(document).ready(function() {
 	// Add functionality to any tabs already included in the html
-	addTabFunctionality($("div." + classTab));
+	$("div." + classTab).each(addTabFunctionality);
 
 	// When the new tab button is successfully clicked, add a new tab
-	$("div." + classButtonTabAdd)
-		.on("click", addTab);
+	// $("div." + classTabBar).each(addTabBarFunctionality);
 
 	// Bind all other mouse functionality to the entire document
 	$(document)
 		.on("mouseup", dragTargetDeselect)
 		.on("mousemove", dragTargetMove);
+
+	functionAddTabBarFunctionality = addTabBarFunctionality;
 });

@@ -3,6 +3,24 @@ var classContextMenuOption = "context-menu-option";
 
 var $contextMenu = null;
 
+/**
+ * Adds a context menu option with a function callback
+ *
+ * Simply bind this function to a desired objects contextmenu call, and pass the
+ * object as the event. >>                                                    <<
+ * >>                                                                         <<
+ * >>  $("example")                                                           <<
+ * >>        .on(                                                             <<
+ * >>            "contextmenu",                                               <<
+ * >>            {title: "My Option", callback: myCallBack},                  <<
+ * >>            addContextMenuOption                                         <<
+ * >>        );                                                               <<
+ * >>                                                                         <<
+ *
+ * @param      {object}  event   The event containing the title of the option as
+ *                               well as the callback function. >>            <<
+ *                               layout: {title: "", callback: fn} >>         <<
+ */	
 function addContextMenuOption(event) {
 	if ($contextMenu == null)
 		return;
@@ -16,6 +34,9 @@ function addContextMenuOption(event) {
 	);
 }
 
+/**
+ * Shows the context menu.
+ */
 function showContextMenu() {
 	if ($contextMenu == null)
 		return; 
@@ -33,6 +54,9 @@ function showContextMenu() {
 		$("body").append($contextMenu);
 }
 
+/**
+ * Hides the context menu.
+ */
 function hideContextMenu() {
 	if ($contextMenu == null)
 		return; 
@@ -45,6 +69,9 @@ function hideContextMenu() {
 }
 
 $(document).ready(function () {
+	/**
+	 * Initializes the context menu and hides it
+	 */
 	function initContextMenu() {
 		// Set the visibility of the custom context menu to visible
 		$(this).css("visibility", "visible");
@@ -53,12 +80,12 @@ $(document).ready(function () {
 		$contextMenu = $(this).detach();
 	}
 
+	// Initialize the context menu
 	$("div." + classContextMenu).first()
 		.each(initContextMenu);
 
 	$(document)
-		.on("contextmenu", false)
-		// .on("contextmenu", {title: "Hello", callback: function() { console.log("Hello"); }}, addContextMenuOption)
-		.on("contextmenu", showContextMenu)
-		.on("click", hideContextMenu);
+		.on("contextmenu", false) 			// Block the system context menu from showing
+		.on("contextmenu", showContextMenu)	// Show the custom context menu on right-click
+		.on("click", hideContextMenu);		// Hide the context menu on left-click
 }); 

@@ -1,3 +1,8 @@
+/**
+ * KNOWN BUG: Selected tabs are slightly too tall causing a scroll bar to appear
+ * on small panels
+ */
+
 :root {
 	/* Tab Bar */
 	--tab-bar-height: 34px;
@@ -46,6 +51,8 @@ div.context-menu {
 	border-radius: 4px;
 
 	padding: 2px;
+
+	user-select: none;
 
 	background-color: white;
 }
@@ -126,7 +133,7 @@ div.panel-split-vertical {
 
 		user-select: none;
 
-		background-color: red;
+		background-color: black;
 	}
 }
 
@@ -159,7 +166,7 @@ div.panel-split-horizontal {
 
 		user-select: none;
 
-		background-color: blue;
+		background-color: black;
 	}
 }
 
