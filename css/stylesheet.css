@@ -1,8 +1,3 @@
-/**
- * KNOWN BUG: Selected tabs are slightly too tall causing a scroll bar to appear
- * on small panels
- */
-
 :root {
 	/* Tab Bar */
 	--tab-bar-height: 34px;
@@ -115,7 +110,7 @@ div.panel-split-vertical {
 	min-height: 10px;
 	min-width: 10px;
 	flex-grow: 1;
-	overflow-x: hidden;
+	overflow: hidden;
 
 	background-color: black;
 
@@ -148,7 +143,7 @@ div.panel-split-horizontal {
 	min-height: 10px;
 	min-width: 10px;
 	flex-grow: 1;
-	overflow-y: hidden;
+	overflow: hidden;
 
 	background-color: black;
 
@@ -180,6 +175,7 @@ div.tab-bar {
 	width: 100%;
 
 	overflow-x: scroll;
+	scrollbar-width: none;
 
 	& div.tab-document {
 		visibility: hidden;
@@ -280,8 +276,6 @@ div.tab {
 }
 
 div.tab-selected {
-	/*border: 1px solid var(--tab-bar-color);*/
-
 	filter: var(--tab-selected-drop-shadow);
 
 	background-color: var(--tab-selected-color);
