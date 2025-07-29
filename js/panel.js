@@ -9,6 +9,17 @@ $(document).ready(function() {
 
 	var $dividerTarget = null;
 
+	// When the page is resized, reset all panel sizes
+	function bodyResized() {
+		$("div." + classPanelSplitVertical + ", div." + classPanelSplitHorizontal + ", div." + classPanel)
+			.css("width", "100%")
+			.css("height", "100%");
+	}
+
+	function isBodyLandscape() {
+		return ($("body").width() >= $("body").height());
+	}
+
 	function addPanelFunctionality() {
 		// Add context menu functionality
 		$(this)
@@ -55,8 +66,6 @@ $(document).ready(function() {
 		// Select the other region to save
 		var $otherSide = $(this).siblings(desiredClass).first();
 
-
-
 		// Find another panel to combine tabs with
 		var $otherPanel = 
 			$otherSide.hasClass(classPanel) ? $otherSide : $otherSide.find("div." + classPanel).first();
@@ -81,10 +90,13 @@ $(document).ready(function() {
 		if ($dividerTarget == null)
 			return;
 
-		var dimension = $dividerTarget.parent().hasClass(classPanelSplitVertical) ? "width" : "height";
+		// Override dimension target if on mobile
+		var dimension = ($dividerTarget.parent().hasClass(classPanelSplitVertical) && isBodyLandscape()) ? "width" : "height";
 
 		// Get the offset of the mouse from the divider
 		var mouseOffset = (dimension == "width" ? event.pageX : event.pageY) - $dividerTarget.data(dataPanelDividerOrigin);
+
+		// console.log(isBodyLandscape());
 
 		// Resize the two panels
 		$dividerTarget
@@ -113,7 +125,8 @@ $(document).ready(function() {
 			return;
 
 		// Set the data of the divider
-		if ($(this).parent().hasClass(classPanelSplitVertical))
+		// Override dimension target if on mobile
+		if ($(this).parent().hasClass(classPanelSplitVertical) && isBodyLandscape())
 			$(this)
 				.data(dataPanelDividerOrigin, $(this).offset().left)
 				.data(dataPanelDividerSizes, [$(this).prev().width(), $(this).next().width()]);
@@ -185,4 +198,6 @@ $(document).ready(function() {
 	$(document)
 		.on("mouseup", panelDividerDeselect)
 		.on("mousemove", panelDividerMove);
+
+	$(window).on("resize", bodyResized);
 });

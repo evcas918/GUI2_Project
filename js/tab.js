@@ -41,7 +41,6 @@ var dataIsClosing = "is-closing";
 
 var $dragTarget = null;
 
-
 /**
  * Combine the tabs of two tab bars
  *
@@ -207,7 +206,9 @@ function newTab(title, $html) {
  */
 function addTab() {
 	// Create the new tab
-	$newTab = newTab("New Tab", $("<textarea>").attr("placeholder",  "Type Here"));
+	$newTab = newTab("New Tab", $("<textarea>")
+		.attr("placeholder",  "Type Here")
+		.attr("spellcheck",  false));
 
 	// Insert it before the new tab button
 	$(this).before($newTab);
