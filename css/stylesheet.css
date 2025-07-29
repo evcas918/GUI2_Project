@@ -1,30 +1,67 @@
 :root {
-	/* Tab Bar */
-	--tab-bar-height: 34px;
-	/* --- */
-	--tab-bar-color: hsl(330deg, 4%, 90%);
+	/* Colors */
+	--forground-color: hsl(142deg, 100%, 97.8%);
+	--forground-subtle-color: hsl(142deg, 5.6%, 54.3%);
 
-	/* Tab and Tab add Button */
+	--background-color: hsl(152deg, 100%, 2.9%);
+	--background-accent-color: hsl(10deg, 4.1%, 29%);
+
+	--hover-color: rgba(255, 255, 255, 0.15);
+	--blur: blur(50px);
+
+	/* Font */
+	--ff: sans-serif;
+	/* >>-----------------------------------<< */
+	--font-logo: bold 1.75rem/1.125em var(--ff);
+	/* >>-----------------------------------<< */
+	--font-title: bold 1.25rem/1em var(--ff);
+	/* >>-----------------------------------<< */
+	--font-bold: bold 1rem/1em var(--ff);
+	/* >>-----------------------------------<< */
+	--font-base: 0.875rem/1em var(--ff);
+	/* >>-----------------------------------<< */
+	--font-sub: 0.875rem/1em var(--ff);
+
+	/* Context Menu */
+	--context-menu-border: 1px solid var(--hover-color);
+	--context-menu-border-radius: 4px;
+	--context-menu-option-border: none;
+	--context-menu-option-border-radius: 4px;
+
+	/* Panel */
+	--panel-min-size: 10px;
+	--panel-divider-size: 4px;
+
+	/* Tab */
+	--tab-bar-height: 34px;
 	--tab-height: var(--tab-bar-height);
 	--tab-max-width: 120px;
 	--tab-min-width: 40px;
 	--tab-padding: 10px;
 	--tab-gap: 2px;
-	/* --- */
-	--tab-color: transparent;
-	--tab-hover-color: color-mix(in srgb, black, transparent 90%);
-	--tab-selected-color: white;
-	--tab-selected-drop-shadow: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.5));
-
-	/* Tab Close Button */
+	--tab-border-radius: 5px;
 	--button-tab-close-height: calc(var(--tab-height) * 0.7);
-	/* --- */
-	--button-tab-close-hover-color: color-mix(in srgb, black, transparent 90%);
+
+	/* Sidebar */
+	--sidebar-width: 200px;
+	--sidebar-margin: 20px;
+	--sidebar-margin-bottom: 100px;
+	--sidebar-border: none;
+	--hamburger-margin: 20px;
+
+	/* Icons */
+	--icon-hamburger-size: 30px;
+	--icon-logo-size: 50px;
+	--icon-account-size: 20px;
 }
 
 body {
 	margin: 0;
+
+	background-color: var(--background-color);
 }
+
+/* Context Menu */
 
 div.context-menu {
 	visibility: hidden;
@@ -41,15 +78,17 @@ div.context-menu {
 	width: fit-content;
 	max-width: 250px;
 	
-
-	border: 2px solid darkgray;
-	border-radius: 4px;
-
 	padding: 2px;
 
 	user-select: none;
 
-	background-color: white;
+	border: var(--context-menu-border);
+	border-radius: var(--context-menu-border-radius);
+
+	font: var(--font-base);
+	color: var(--forground-color);
+
+	backdrop-filter: var(--blur);
 }
 
 div.context-menu-option {
@@ -58,31 +97,29 @@ div.context-menu-option {
 	box-sizing: border-box;
 	min-width: 100%;
 
-	border: 2px solid transparent;
-	border-radius: 4px;
-
 	padding: 4px 60px 4px 30px;
 
-	font-family: sans-serif;
-	font-size: small;
-	background-color: transparent;
+	border: var(--context-menu-option-border);
+	border-radius: var(--context-menu-option-border-radius);
 
-	&:hover {
-		border-color: darkgray;
-		background-color: rgba(0, 0, 0, 0.25);
+	background-color: var(--hover-color);
+
+	&:not(:hover) {
+		border-color: transparent;
+		background-color: transparent;
 	}
+
 }
+
+/* Panel */
 
 div.panel-root {
 	display: block;
 
 	box-sizing: border-box;
-	height: 400px;
-	width: 600px;
+	height: 100vh;
+	width: 100vw;
 
-	padding: 4px;
-
-	background-color: black;
 }
 
 div.panel {
@@ -91,13 +128,11 @@ div.panel {
 	box-sizing: border-box;
 	height: 100%;
 	width: 100%;
-	min-height: 10px;
-	min-width: 10px;
+	min-height: var(--panel-min-size);
+	min-width: var(--panel-min-size);
 	flex-grow: 1;
 
-	/*padding: 4px;*/
-
-	background-color: white;
+	background-color: var(--background-color);
 }
 
 div.panel-split-vertical {
@@ -112,8 +147,6 @@ div.panel-split-vertical {
 	flex-grow: 1;
 	overflow: hidden;
 
-	background-color: black;
-
 	& > div.panel-divider {
 		all: unset;
 		display: block;
@@ -121,15 +154,16 @@ div.panel-split-vertical {
 		z-index: 1;
 
 		height: 100%;
-		max-width: 4px;
-		min-width: 4px;
+		max-width: var(--panel-divider-size);
+		min-width: var(--panel-divider-size);
 
 		cursor: e-resize;
 
 		user-select: none;
 
-		background-color: black;
+		background-color: var(--background-accent-color);
 	}
+
 }
 
 div.panel-split-horizontal {
@@ -145,25 +179,26 @@ div.panel-split-horizontal {
 	flex-grow: 1;
 	overflow: hidden;
 
-	background-color: black;
-
 	& > div.panel-divider {
 		all: unset;
 		display: block;
 
 		z-index: 1;
 
-		max-height: 4px;
-		min-height: 4px;
+		max-height: var(--panel-divider-size);
+		min-height: var(--panel-divider-size);
 		width: 100%;
 
 		cursor: n-resize;
 
 		user-select: none;
 
-		background-color: black;
+		background-color: var(--background-accent-color);
 	}
+
 }
+
+/* Tab */
 
 div.tab-bar {
 	display: flex;
@@ -177,6 +212,8 @@ div.tab-bar {
 	overflow-x: scroll;
 	scrollbar-width: none;
 
+	background-color: var(--background-accent-color);
+
 	& div.tab-document {
 		visibility: hidden;
 	}
@@ -188,14 +225,25 @@ div.tab {
 	justify-content: space-between;
 	align-items: center;
 
+	z-index: 1;
+
 	height: var(--tab-height);
 	max-width: var(--tab-max-width);
 	min-width: var(--tab-min-width);
 	flex-grow: 1;
 
-	z-index: 1;
+	border-radius: var(--tab-border-radius);
+
+	font: var(--font-base);
+	color: var(--forground-color);
+
+	background-color: var(transparent);
 
 	user-select: none;
+
+	&:not(.tab-selected):hover{
+		background-color: var(--hover-color);
+	}
 }
 
 div.tab-title {
@@ -207,6 +255,8 @@ div.tab-title {
 
 div.ghost-tab {
 	display: block;
+
+	background-color: transparent;
 }
 
 div.button-tab-add {
@@ -218,6 +268,17 @@ div.button-tab-add {
 	z-index: 1;
 
 	user-select: none;
+
+
+	border-radius: var(--tab-border-radius);
+
+
+	color: var(--forground-color);
+	background-color: var(transparent);
+
+	&:hover {
+		background-color: var(--hover-color);
+	}
 }
 
 div.button-tab-close {
@@ -226,6 +287,15 @@ div.button-tab-close {
 	height: var(--button-tab-close-height);
 	min-width: var(--button-tab-close-height);
 	margin-right: calc((var(--tab-height) - var(--button-tab-close-height)) * 0.5);
+
+	border-radius: var(--tab-border-radius);
+
+	color: var(--forground-color);
+	background-color: transparent;
+
+	&:hover {
+		background-color: var(--hover-color);
+	}
 }
 
 div.tab-document-view {
@@ -250,75 +320,155 @@ div.tab-document {
 	width: 100%;
 }
 
-/* Colors and styles */
-div.panel {
-	/*border: 1px solid var(--tab-bar-color);*/
+div.tab-selected {
+	filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.5));
 
-	/*background-color: white;*/
-	/*background-color: transparent;*/
+	background-color: var(--background-color);
 }
 
-div.tab-bar {
-	background-color: var(--tab-bar-color);
-}
+textarea {
+	all: unset;
 
-div.tab {
-	border-radius: 5px;
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+
+	padding-left: 25px;
 
 	font-family: monospace;
-	font-size: medium;	
+	font-size: large;
 
-	background-color: var(--tab-color);
+	color: var(--forground-color);
+}
 
-	&:not(.tab-selected):hover{
-		background-color: var(--tab-hover-color);
+/* Side Bar */
+
+div.sidebar {
+	display: block;
+
+	position: absolute;
+	top: 0px;
+	left: calc(0px - var(--sidebar-width));
+	z-index: 1;
+
+	box-sizing: border-box;
+	height: 100vh;
+	width: var(--sidebar-width);
+
+	border-right: var(--sidebar-border);	
+}
+
+div.sidebar-blur {
+	display: block;
+
+	position: relative;
+	top: 0px;
+
+	height: 100%;
+
+	backdrop-filter: var(--blur);
+}
+
+div.button-sidebar {
+	display: block;
+
+	position: fixed;
+	left: var(--hamburger-margin);
+	bottom: var(--hamburger-margin);
+	z-index: 1;
+
+	width: fit-content;
+	padding: 5px;
+
+	border-radius: 50%;
+
+	&:hover {
+		background-color: var(--hover-color);
 	}
 }
 
-div.tab-selected {
-	filter: var(--tab-selected-drop-shadow);
+div.logo {
+	display: flex;
+	align-items: center;
+	column-gap: 10px;
 
-	background-color: var(--tab-selected-color);
+	margin-bottom: 40px;
+
+	font: var(--font-logo);
+	color: var(--forground-color);
+
+	user-select: none;
 }
 
-div.ghost-tab {
-	/*border: 1px solid transparent;*/
+div.sidebar-options {
+	display: flex;
+	flex-direction: column;
 
-	background-color: transparent;
+
+	height: calc(100% - var(--sidebar-margin-bottom));
+
+	padding: var(--sidebar-margin);
+
+
+	& hr {
+		width: 100%;
+		margin: 20px 0px;
+		border-color: var(--forground-color);
+	} 
 }
 
-div.button-tab-add {	
-	border-radius: 5px;
+div.tab-area {
+	display: block;
 
-	background-color: var(--tab-color);
+	min-height: 100px;
+	flex-grow: 1;
 
+	font: var(--font-sub);
+	color: var(--forground-subtle-color);
+
+	user-select: none;
+}
+
+div.button-sign-out {
+	display: flex;
+	align-items: center;
+	column-gap: 10px;
+
+	box-sizing: border-box;
+
+	padding: 10px 20px;
+
+	text-align: center;
+
+	border-radius: 10px;
+
+	font: var(--font-base);
+	color: var(--forground-color);
+
+	user-select: none;
+
+	& *:not(.icon-account) {
+		flex-grow: 1;
+	}
 	&:hover {
-		background-color: var(--tab-hover-color);
+		background-color: var(--hover-color);
 	}
 }
 
-div.button-tab-close {
-	border-radius: 5px;
 
-	background-color: transparent;
-
-	&:hover {
-		background-color: var(--button-tab-close-hover-color);
-	};
-}
+/* Icons */
 
 div.icon-add {
 	height: 100%;
 	width: 100%;
 
+	text-align: center;
+	align-content: center;
+	line-height: 100%;
 
 	font-family: sans-serif;
 	font-weight: bold;
 	font-size: small;
-
-	text-align: center;
-	align-content: center;
-	line-height: 100%;
 
 	&::before {
 		content: "\FF0B";
@@ -329,69 +479,16 @@ div.icon-close {
 	height: 100%;
 	width: 100%;
 
-	font-family: serif;
-	/*font-weight: bold;*/
-	font-size: small;
-
 	text-align: center;
 	align-content: center;
 	line-height: 100%;
 
+	font-family: serif;
+	font-size: small;
+
 	&::before {
 		content: "\00D7";
 	}
-}
-
-textarea {
-	all: unset;
-
-	width: 100%;
-	height: 100%;
-
-	padding-left: 25px;
-
-	font-family: monospace;
-	font-size: large;
-
-	/*caret-color: red;*/
-
-	/*background-color: red;*/
-}
-
-/* >>------------------------------------<< */
-
-:root {
-	/* Dimensions */
-	--hamburger-margin: 20px;
-	--sidebar-margin: 20px;
-	--sidebar-margin-bottom: 100px;
-
-	/* Colors */
-	--background-color: #000F08;
-	--highlight-color: #1C3738;
-	--font-color: #F4FFF8;
-	--font-subtle-color: #4D4847;
-
-	/* Icons */
-	--icon-hamburger-size: 30px;
-	--icon-logo-size: 50px;
-	--icon-account-size: 20px;
-
-	/* Sidebar */
-	--sidebar-width: 200px;
-	--sidebar-color: transparent;
-	--sidebar-border: 2px solid var(--highlight-color);
-
-	/* Font */
-	--ff: sans-serif;
-	--logo-font: bold 1.75rem/1.75rem var(--ff);
-	--account-font: 1rem var(--ff);
-	--subtle-font: 1rem/1rem var(--ff);
-}
-
-body {
-	background-color: var(--background-color);
-
 }
 
 div.icon-hamburger {
@@ -404,90 +501,17 @@ div.icon-hamburger {
 	background-size: var(--icon-hamburger-size) var(--icon-hamburger-size);
 }
 
-div.button-sidebar {
-	display: block;
-
-	position: fixed;
-	left: var(--hamburger-margin);
-	bottom: var(--hamburger-margin);
-
-	width: fit-content;
-	padding: 5px;
-
-	border-radius: 50%;
-
-	&:hover {
-		background-color: var(--highlight-color);
-	}
-}
-
-div.sidebar {
-	display: block;
-
-	position: absolute;
-
-	box-sizing: border-box;
-	height: 100vh;
-	width: var(--sidebar-width);
-	left: calc(0px - var(--sidebar-width));
-	/*left: 0px;*/
-
-	border-right: var(--sidebar-border);
-
-	background-color: var(--sidebar-color);
-}
-
 div.icon-logo {
 	display: block;
 
 	min-width: var(--icon-logo-size);
 	min-height: var(--icon-logo-size);
 
-	border: 2px solid var(--font-color);
+	border: 2px solid var(--forground-color);
 	border-radius: 50%;
 
 	background-image: url('../assets/icon-logo.png');
 	background-size: var(--icon-logo-size) var(--icon-logo-size);
-}
-
-div.logo {
-	display: flex;
-	align-items: center;
-	column-gap: 10px;
-
-	margin-bottom: 40px;
-
-	font: var(--logo-font);
-	color: var(--font-color);
-
-	user-select: none;
-}
-
-div.sidebar-options {
-	display: flex;
-	flex-direction: column;
-
-
-	height: calc(100% - var(--sidebar-margin-bottom));
-
-	margin: var(--sidebar-margin);
-
-
-	& hr {
-		width: 100%;
-		margin: 20px 0px;
-		border-color: var(--font-color);
-	} 
-}
-
-div.tab-area {
-	display: block;
-
-	min-height: 100px;
-	flex-grow: 1;
-
-	font: var(--subtle-font);
-	color: var(--font-subtle-color);
 }
 
 div.icon-account {
@@ -496,38 +520,9 @@ div.icon-account {
 	min-width: var(--icon-account-size);
 	min-height: var(--icon-account-size);
 
-	border: 2px solid var(--font-color);
+	border: 2px solid var(--forground-color);
 	border-radius: 50%;
 
 	background-image: url('../assets/icon-account.png');
 	background-size: var(--icon-account-size) var(--icon-account-size);
-}
-
-div.button-sign-out {
-	display: flex;
-	align-items: center;
-	column-gap: 10px;
-
-	box-sizing: border-box;
-
-	padding: 10px 20px;
-
-	border-radius: 10px;
-
-
-	text-align: center;
-
-	font: var(--account-font);
-	color: var(--font-color);
-	
-
-	/*background-color: green;*/
-	user-select: none;
-
-	& *:not(.icon-account) {
-		flex-grow: 1;
-	}
-	&:hover {
-		background-color: var(--highlight-color);
-	}
 }
