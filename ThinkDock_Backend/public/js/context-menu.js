@@ -89,3 +89,15 @@ $(document).ready(function () {
 		.on("contextmenu", showContextMenu)	// Show the custom context menu on right-click
 		.on("click", hideContextMenu);		// Hide the context menu on left-click
 }); 
+
+$(document).on(
+  "contextmenu",
+  { title: "Calendar", callback: function () {
+	 if (typeof addCalendarTab === "function") {
+        addCalendarTab(); // Launch the calendar tab
+      } else {
+        console.error("addCalendarTab is not defined");
+      }
+  }},
+  addContextMenuOption
+);
