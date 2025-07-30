@@ -9,4 +9,6 @@ open terminal
 
 cd ThinkDock_Backend
 
+npm install
+
 node app.js
