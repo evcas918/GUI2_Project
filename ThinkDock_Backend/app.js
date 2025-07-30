@@ -1,12 +1,17 @@
 const express = require('express');
-const cors = require('cors');
-const fileRoutes = require('./routes/fileRoutes');
-require('dotenv').config();
-
+const path = require('path');
 const app = express();
-app.use(cors());
-app.use(express.json());
-app.use('/api/files', fileRoutes);
+const PORT = 5000;
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`ThinkDock backend running on port ${PORT}`));
+// Serve static files from "public"
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Default route → serve index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'html', 'index.html'));
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
