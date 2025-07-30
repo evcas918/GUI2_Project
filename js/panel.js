@@ -23,7 +23,14 @@ $(document).ready(function() {
 	function addPanelFunctionality() {
 		// Add context menu functionality
 		$(this)
+			// Added calendar tab, later can add a widget menu instead then lead to submenu Calendar, Timer, and etc
 			.on(
+  				"contextmenu",
+  				{title: "Add Calendar", callback: function() {
+      			addCalendarTab.call($(this));
+				}},
+  				addContextMenuOption
+			).on(
 				"contextmenu",
 				{title: "Pane Above", callback: panelSplit.bind($(this), 0, 0)},
 				addContextMenuOption
