@@ -429,7 +429,7 @@ div.tab-area {
 	user-select: none;
 }
 
-div.button-sign-out {
+div.button-sign-in-out {
 	display: flex;
 	align-items: center;
 	column-gap: 10px;
@@ -520,7 +520,7 @@ div.icon-account {
 	min-width: var(--icon-account-size);
 	min-height: var(--icon-account-size);
 
-	border: 2px solid var(--forground-color);
+	border: 1px solid var(--forground-color);
 	border-radius: 50%;
 
 	background-image: url('../assets/icon-account.png');
