@@ -43,6 +43,12 @@ $(document).ready(function() {
 				"contextmenu",
 				{title: "Close Pane", callback: panelClose.bind($(this))},
 				addContextMenuOption
+			).on(
+  				"contextmenu", // click for timer
+  				{ title: "Timer", callback: function() {
+					addTimerTab.call($(this));
+				}},
+  				addContextMenuOption
 			);
 
 		// Add resizing functionality
