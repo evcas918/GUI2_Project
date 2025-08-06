@@ -1,0 +1,75 @@
+.tab-document {
+  position: relative;
+  overflow: auto; 
+  height: 100%; 
+  max-height: calc(100vh - 80px); 
+}
+
+#calendar, .fc {
+  width: 100%;
+  height: 100%; /* Makes calendar fill its container */
+  box-sizing: border-box; 
+  background-color: #191919;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
+
+}
+
+.tab-document-view {
+  overflow: hidden; 
+  height: 100%; 
+  display: flex; 
+  flex-direction: column; 
+}
+
+/* Remove all borders first for regular calendar*/
+.fc .fc-daygrid-day,
+.fc .fc-daygrid-day-top,
+.fc .fc-col-header-cell {
+  border: none !important;
+}
+
+/* Add border on right and bottom only */
+.fc .fc-daygrid-day,
+.fc .fc-daygrid-day-top,
+.fc .fc-col-header-cell {
+  border-right: 1px solid white !important;
+  border-bottom: 1px solid white !important;
+}
+
+/* Add left border to the first column */
+.fc .fc-daygrid-body tr > td:first-child,
+.fc .fc-col-header > tr > th:first-child {
+  border-left: 1px solid white !important;
+}
+
+/* Add top border to the header row */
+.fc .fc-col-header {
+  border-top: 1px solid white !important;
+}
+
+/*------------------------------------------------------------------------------------- */
+
+/* Show day numbers in multiMonthYear view */
+.fc-multimonth .fc-daygrid-day-number {
+  display: block !important;
+  color: black !important;      
+  font-weight: normal !important; 
+  font-size: 1em !important;  
+  padding: 2px;                
+}
+
+
+/* Make the borders of the multiMonthYear month boxes black */
+.fc-multimonth .fc-daygrid-day-frame {
+  border: 1px solid black !important;
+}
+
+/* column headers border black */
+.fc-multimonth .fc-col-header-cell {
+  border-bottom: 1px solid black !important;
+}
+
+/* multiMonth container border black */
+.fc-multimonth {
+  border: 1px solid black !important;
+}
