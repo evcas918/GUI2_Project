@@ -1,0 +1,14 @@
+# Node modules (do not push dependencies)
+node_modules/
+
+# Firebase service account key (DO NOT PUSH!)
+serviceAccountKey.json
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# System files
+.DS_Store
+.env
