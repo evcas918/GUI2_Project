@@ -8,16 +8,21 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = signupEmail.value;
     const password = signupPassword.value;
 
-    try {
-      await firebase.auth().createUserWithEmailAndPassword(email, password);
-      console.log("Account created successfully");
+try {
+  await firebase.auth().createUserWithEmailAndPassword(email, password);
+  console.log("Account created successfully");
 
-      // Hide form after signup
-      document.querySelector(".signup-container").style.display = "none";
-    } catch (error) {
-      console.error("Signup failed:", error.message);
-      alert("Signup failed: " + error.message);
-    }
+  // Clear fields after signup
+  signupEmail.value = "";
+  signupPassword.value = "";
+
+  // Hide form
+  document.querySelector(".signup-container").style.display = "none";
+} catch (error) {
+  console.error("Signup failed:", error.message);
+  alert("Signup failed: " + error.message);
+}
+
   });
 
   document.getElementById("signup-reset").addEventListener("click", function () {

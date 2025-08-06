@@ -8,17 +8,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = loginEmail.value;
     const password = loginPassword.value;
 
-    try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-      console.log("Successfully Logged In");
+try {
+  await firebase.auth().signInWithEmailAndPassword(email, password);
+  console.log("Successfully Logged In");
 
-      // Hide form after login
-      document.querySelector(".login-container").style.display = "none";
-    } catch (error) {
-      console.error("Login failed:", error.message);
-      alert("Login failed: " + error.message);
-    }
-  });
+  // Clear fields after login
+  loginEmail.value = "";
+  loginPassword.value = "";
+
+  // Hide form
+  document.querySelector(".login-container").style.display = "none";
+} catch (error) {
+  console.error("Login failed:", error.message);
+  alert("Login failed: " + error.message);
+}
+
+    });
 
   document.getElementById("login-reset").addEventListener("click", function () {
     loginEmail.value = "";
