@@ -41,6 +41,9 @@ var dataParentIndex = "parent-index";
 var dataLinkedDocument = "linked-document";
 var dataIsClosing = "is-closing";
 
+
+var classPanelContext = "panel-context";
+
 var $dragTarget = null;
 
 /**
@@ -62,7 +65,7 @@ function tabBarCombine($retain, $lose) {
  * Adds a tab bar to an empty panel
  */
 function addTabBarToPanel() {
-	if ($(this).children().length > 0)
+	if ($(this).children("div." + classTabBar).length > 0)
 		return;
 
 	// Add the html of a tab bar to panel
@@ -77,6 +80,10 @@ function addTabBarToPanel() {
 							$("<div>")
 								.addClass(classIconAdd)
 						)
+				).append(
+					$("<div>")
+						.addClass(classPanelContext)
+						.on("click", showContextMenu)
 				).each(addTabBarFunctionality) // then add its functionality
 		).append(
 			$("<div>") // Also add tab document view

@@ -23,10 +23,11 @@
 	--font-sub: 0.875rem/1em var(--ff);
 
 	/* Context Menu */
-	--context-menu-border: 1px solid var(--hover-color);
+	--context-menu-border: 2px solid var(--background-accent-color);
 	--context-menu-border-radius: 4px;
 	--context-menu-option-border: none;
 	--context-menu-option-border-radius: 4px;
+	--context-menu-background-color: var(--background-accent-color);
 
 	/* Panel */
 	--panel-min-size: 10px;
@@ -61,6 +62,37 @@ body {
 	background-color: var(--background-color);
 }
 
+div.panel-context {
+	display: block;
+
+	height: var(--tab-height);
+	min-width: var(--tab-height);
+
+	z-index: 1;
+
+	user-select: none;
+
+	border-radius: var(--tab-border-radius);
+
+
+	color: var(--forground-color);
+	background-color: var(transparent);
+
+	text-align: center;
+	align-content: center;
+	line-height: 100%;
+
+	font-family: serif;
+	font-size: x-large;
+
+	&:hover {
+		background-color: var(--hover-color);
+	}
+	&::before {
+		content: "\205D";
+	}
+}
+
 /* Context Menu */
 
 div.context-menu {
@@ -83,12 +115,14 @@ div.context-menu {
 	user-select: none;
 
 	border: var(--context-menu-border);
-	border-radius: var(--context-menu-border-radius);
+	border-bottom-left-radius: var(--context-menu-border-radius);
+	border-bottom-right-radius: var(--context-menu-border-radius);
 
 	font: var(--font-base);
 	color: var(--forground-color);
 
-	backdrop-filter: var(--blur);
+	background-color: var(--context-menu-background-color);
+	/*backdrop-filter: var(--blur);*/
 }
 
 div.context-menu-option {
@@ -124,6 +158,8 @@ div.panel-root {
 
 div.panel {
 	display: block;
+
+	position: relative;
 
 	box-sizing: border-box;
 	height: 100%;

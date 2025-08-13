@@ -41,17 +41,30 @@ function showContextMenu() {
 	if ($contextMenu == null)
 		return; 
 
-	// Set the position of the context menu to where the cursor is
-	$contextMenu
-		.css("top", event.pageY)
-		.css("left", event.pageX);
 
 	// If the context menu is already showing then hide it
-	if ($contextMenu.parent().is($("body")))
+	if ($contextMenu.parent().is($("body"))) {
 		hideContextMenu();
-	// Otherwise reattach the context menu to the body to be displayed
-	else
-		$("body").append($contextMenu);
+		return;
+	}
+
+	hideContextMenu();
+	$("body").append($contextMenu);
+
+	// // Set the position of the context menu to where the cursor is
+	// $contextMenu
+	// 	.css("top", event.pageY)
+	// 	.css("left", event.pageX);
+	
+	// Calculate the position for the context menu
+	var width_ = $contextMenu.css("min-width").replace(/\D/g,'');
+	var left_ = $(this).offset().left + $(this).width() - width_;
+	if (left_ - width_ < 0)
+		left_ = 0;
+
+	$contextMenu
+		.css("top", $(this).offset().top + $(this).height())
+		.css("left", left_);
 }
 
 /**
@@ -85,13 +98,18 @@ $(document).ready(function () {
 		.each(initContextMenu);
 
 	$(document)
-		.on("contextmenu", false) 			// Block the system context menu from showing
-		.on("contextmenu", showContextMenu)	// Show the custom context menu on right-click
-		.on("click", hideContextMenu);		// Hide the context menu on left-click
+		// .on("contextmenu", false) 			// Block the system context menu from showing
+		// .on("contextmenu", showContextMenu)	// Show the custom context menu on right-click
+		.on("click", function(evt) {
+			if ($(evt.target).hasClass("panel-context"))
+				return;
+
+			hideContextMenu();
+		});		// Hide the context menu on left-click
 }); 
 
 $(document).on(
-  "contextmenu",
+  "click",
   { title: "Calendar", callback: function () {
 	 if (typeof addCalendarTab === "function") {
         addCalendarTab(); // Launch the calendar tab

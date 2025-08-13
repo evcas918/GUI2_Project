@@ -26,27 +26,27 @@ $(document).ready(function() {
 		// Add context menu functionality
 		$(this)
 			.on(
-				"contextmenu",
+				"click",
 				{title: "Panel Above", callback: panelSplit.bind($(this), 0, 0)},
 				addContextMenuOption
 			).on(
-				"contextmenu",
+				"click",
 				{title: "Panel Below", callback: panelSplit.bind($(this), 0, 1)},
 				addContextMenuOption
 			).on(
-				"contextmenu",
+				"click",
 				{title: "Panel Right", callback: panelSplit.bind($(this), 1, 1)},
 				addContextMenuOption
 			).on(
-				"contextmenu",
+				"click",
 				{title: "Panel Left", callback: panelSplit.bind($(this), 1, 0)},
 				addContextMenuOption
 			).on(
-				"contextmenu",
+				"click",
 				{title: "Close Panel", callback: panelClose.bind($(this))},
 				addContextMenuOption
 			).on(
-  				"contextmenu", // click for timer
+  				"click", // click for timer
   				{ title: "Timer", callback: function() {
 					addTimerTab.call($(this));
 				}},
