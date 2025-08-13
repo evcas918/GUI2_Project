@@ -27,23 +27,23 @@ $(document).ready(function() {
 		$(this)
 			.on(
 				"contextmenu",
-				{title: "Pane Above", callback: panelSplit.bind($(this), 0, 0)},
+				{title: "Panel Above", callback: panelSplit.bind($(this), 0, 0)},
 				addContextMenuOption
 			).on(
 				"contextmenu",
-				{title: "Pane Below", callback: panelSplit.bind($(this), 0, 1)},
+				{title: "Panel Below", callback: panelSplit.bind($(this), 0, 1)},
 				addContextMenuOption
 			).on(
 				"contextmenu",
-				{title: "Pane Right", callback: panelSplit.bind($(this), 1, 1)},
+				{title: "Panel Right", callback: panelSplit.bind($(this), 1, 1)},
 				addContextMenuOption
 			).on(
 				"contextmenu",
-				{title: "Pane Left", callback: panelSplit.bind($(this), 1, 0)},
+				{title: "Panel Left", callback: panelSplit.bind($(this), 1, 0)},
 				addContextMenuOption
 			).on(
 				"contextmenu",
-				{title: "Close Pane", callback: panelClose.bind($(this))},
+				{title: "Close Panel", callback: panelClose.bind($(this))},
 				addContextMenuOption
 			).on(
   				"contextmenu", // click for timer
@@ -63,6 +63,10 @@ $(document).ready(function() {
 	}
 
 	function panelClose() {
+		// Prevent user from closing the very last panel
+		if ($("div." + classPanel).length <= 1)
+			return;
+
 		var dimension = $(this).parent().hasClass(classPanelSplitVertical) ? "width" : "height";
 
 		// The desired selection
