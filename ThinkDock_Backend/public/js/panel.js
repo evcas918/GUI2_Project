@@ -1,4 +1,6 @@
 $(document).ready(function() {
+	const maxPanelCount = 6;
+
 	var classPanel = "panel";
 	var classPanelSplitVertical = "panel-split-vertical";
 	var classPanelSplitHorizontal = "panel-split-horizontal";
@@ -147,6 +149,12 @@ $(document).ready(function() {
 	}
 
 	function panelSplit(splitType, direction) {
+		// Fail if there are too many panels open
+		if ($("div." + classPanel).length >= maxPanelCount) {
+			alert("Too many panels!");
+			return;
+		}
+
 		// Save the dimension to split in
 		var dimension = splitType ? "height" : "width";
 		// Save the size of the current panel on that dimension

@@ -22,6 +22,8 @@ $.fn.insertIndex = function ($dom, index) {
 }
 
 
+const maxTabCount = 15;
+
 var classTab = "tab";
 var classTabTitle = "tab-title";
 var classTabBar = "tab-bar";
@@ -205,6 +207,11 @@ function newTab(title, $html) {
  * Adds a tab to the current tab bar
  */
 function addTab() {
+	if ($("div." + classTab).length >= maxTabCount) {
+		alert("Too many tabs!");
+		return;
+	}
+
 	// Create the new tab
 	$newTab = newTab("New Tab", $("<textarea>")
 		.attr("placeholder",  "Type Here")
