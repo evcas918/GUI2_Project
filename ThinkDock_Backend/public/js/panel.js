@@ -10,7 +10,7 @@ $(document).ready(function() {
 	var $dividerTarget = null;
 
 	// When the page is resized, reset all panel sizes
-	function bodyResized() {
+	function flushSizes() {
 		$("div." + classPanelSplitVertical + ", div." + classPanelSplitHorizontal + ", div." + classPanel)
 			.css("width", "100%")
 			.css("height", "100%");
@@ -179,7 +179,6 @@ $(document).ready(function() {
 							classPanelSplitHorizontal)	// Argument data dictates split orientation
 						.append($newDivider)			// Append the new divider
 						.append($newPanel)				// Append the new panel
-						.css(dimension, size)			// Set the size of the new panel split along the selected dimension
 				).prependTo($(this).next());			// Prepend the current panel to the new split
 		} else {
 			$(this)
@@ -191,12 +190,13 @@ $(document).ready(function() {
 							classPanelSplitHorizontal)	// Argument data dictates split orientation
 						.append($newDivider)			// Append the new divider
 						.prepend($newPanel)				// Prepend the new panel
-						.css(dimension, size)			// Set the size of the new panel split along the selected dimension
 				).appendTo($(this).next());				// Append the current panel to the new split
 		}
 
 		// Add all functionality to the new panel
 		$newPanel.each(addPanelFunctionality);
+
+		flushSizes();
 	}
 
 	$("div." + classPanel).each(addPanelFunctionality);
@@ -205,5 +205,5 @@ $(document).ready(function() {
 		.on("mouseup", panelDividerDeselect)
 		.on("mousemove", panelDividerMove);
 
-	$(window).on("resize", bodyResized);
+	$(window).on("resize", flushSizes);
 });
