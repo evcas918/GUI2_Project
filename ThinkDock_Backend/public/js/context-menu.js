@@ -34,6 +34,13 @@ function addContextMenuOption(event) {
 	);
 }
 
+function addContextMenuSpacer() {
+	if ($contextMenu == null)
+		return;
+
+	$contextMenu.append($("<hr>"));
+}
+
 /**
  * Shows the context menu.
  */
@@ -75,7 +82,7 @@ function hideContextMenu() {
 		return; 
 
 	// Remove all available options to make way for new set
-	$contextMenu.children("div." + classContextMenuOption).remove();
+	$contextMenu.children().remove();
 
 	// Detach the context menu to hide
 	$contextMenu.detach();
@@ -106,16 +113,4 @@ $(document).ready(function () {
 
 			hideContextMenu();
 		});		// Hide the context menu on left-click
-}); 
-
-$(document).on(
-  "click",
-  { title: "Calendar", callback: function () {
-	 if (typeof addCalendarTab === "function") {
-        addCalendarTab(); // Launch the calendar tab
-      } else {
-        console.error("addCalendarTab is not defined");
-      }
-  }},
-  addContextMenuOption
-);
+});

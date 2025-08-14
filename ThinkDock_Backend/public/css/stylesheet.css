@@ -82,14 +82,15 @@ div.panel-context {
 	align-content: center;
 	line-height: 100%;
 
-	font-family: serif;
-	font-size: x-large;
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: small;
 
 	&:hover {
 		background-color: var(--hover-color);
 	}
 	&::before {
-		content: "\205D";
+		content: "\FF0B";
 	}
 }
 
@@ -122,7 +123,11 @@ div.context-menu {
 	color: var(--forground-color);
 
 	background-color: var(--context-menu-background-color);
-	/*backdrop-filter: var(--blur);*/
+	
+	& hr {
+		width: 100%;
+		border-color: var(--hover-color);
+	}
 }
 
 div.context-menu-option {

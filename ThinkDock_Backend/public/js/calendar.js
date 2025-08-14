@@ -9,12 +9,18 @@ function addCalendarTab() {
       color: "white"
     });
 
-  const $calendarTab = newTab("Calendar", $calendarEl); 
-
-  $("." + classButtonTabAdd).before($calendarTab);
-
-  tabSiblingsClearSelection.call($calendarTab);
-  tabSelect.call($calendarTab);
+  // OLD
+  // const $calendarTab = newTab("Calendar", $calendarEl); 
+  //
+  // $("." + classButtonTabAdd).before($calendarTab);
+  //
+  // tabSiblingsClearSelection.call($calendarTab);
+  // tabSelect.call($calendarTab);
+  // 
+  
+  // New
+  addTab($(this), "Calendar", $calendarEl);
+  
 
 
   setTimeout(() => {                                                    // refreshes and rerenders the calendar

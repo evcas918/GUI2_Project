@@ -73,14 +73,15 @@ function addTabBarToPanel() {
 		.append(
 			$("<div>")
 				.addClass(classTabBar)
+				// .append(
+				// 	$("<div>")
+				// 		.addClass(classButtonTabAdd)
+				// 		.append(
+				// 			$("<div>")
+				// 				.addClass(classIconAdd)
+				// 		)
+				// )
 				.append(
-					$("<div>")
-						.addClass(classButtonTabAdd)
-						.append(
-							$("<div>")
-								.addClass(classIconAdd)
-						)
-				).append(
 					$("<div>")
 						.addClass(classPanelContext)
 						.on("click", showContextMenu)
@@ -213,7 +214,7 @@ function newTab(title, $html) {
 /**
  * Adds a tab to the current tab bar
  */
-function addTab() {
+function addTabD() {
 	if ($("div." + classTab).length >= maxTabCount) {
 		alert("Too many tabs!");
 		return;
@@ -230,6 +231,29 @@ function addTab() {
 	// Select the new tab
 	tabSiblingsClearSelection.call($newTab);
 	tabSelect.call($newTab);
+}
+
+function addTab($panel, title, $content) {
+	// console.log($panel);
+	// return;
+
+	if ($("div." + classTab).length >= maxTabCount) {
+		alert("Too many tabs!");
+		return;
+	}
+
+	// Create the new tab
+	$newTab = newTab(title, $content);
+
+	// Insert it before the new tab button
+	$panel.children("div." + classTabBar).first()
+		.children("div." + classPanelContext).before($newTab);
+
+	// Select the new tab
+	tabSiblingsClearSelection.call($newTab);
+	tabSelect.call($newTab);
+
+	return $newTab;
 }
 
 /*
@@ -485,8 +509,8 @@ function dragTargetMove() {
  * Adds functionality to the tab bar
  */
 function addTabBarFunctionality() {
-	$(this).children("div." + classButtonTabAdd)
-		.on("click", addTab);
+	// $(this).children("div." + classButtonTabAdd)
+	// 	.on("click", addTabD);
 }
 
 $(document).ready(function() {

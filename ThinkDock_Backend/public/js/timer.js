@@ -37,12 +37,18 @@ function addTimerTab() {
     </div>
   `);
 
+  // OLD
   // Tab setup
-  const $timerTab = newTab("Timer", $timerContainer);
-  $("." + classButtonTabAdd).before($timerTab);
-  tabSiblingsClearSelection.call($timerTab);
-  tabSelect.call($timerTab);
-  const $tabTitle = $timerTab.children("." + classTabTitle);
+  // const $timerTab = newTab("Timer", $timerContainer);
+  // $("." + classButtonTabAdd).before($timerTab);
+  // tabSiblingsClearSelection.call($timerTab);
+  // tabSelect.call($timerTab);
+  // const $tabTitle = $timerTab.children("." + classTabTitle);
+  // 
+
+  // NEW
+  const $tabTitle = addTab($(this), "Timer", $timerContainer)
+    .children("." + classTabTitle);
 
   // Timer state
   let timerInterval = null;

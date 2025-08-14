@@ -27,30 +27,47 @@ $(document).ready(function() {
 		$(this)
 			.on(
 				"click",
+				{title: "Text Editor", callback: addTextEditorTab.bind($(this))},
+				addContextMenuOption
+			)
+			.on(
+				"click",
+				{title: "Calendar", callback: addCalendarTab.bind($(this))},
+				addContextMenuOption
+			)
+			.on(
+  				"click",
+  				{title: "Timer", callback: addTimerTab.bind($(this))},
+  				addContextMenuOption
+			)
+			.on(
+				"click",
+				addContextMenuSpacer
+			)
+			.on(
+				"click",
 				{title: "Panel Above", callback: panelSplit.bind($(this), 0, 0)},
 				addContextMenuOption
-			).on(
+			)
+			.on(
 				"click",
 				{title: "Panel Below", callback: panelSplit.bind($(this), 0, 1)},
 				addContextMenuOption
-			).on(
+			)
+			.on(
 				"click",
 				{title: "Panel Right", callback: panelSplit.bind($(this), 1, 1)},
 				addContextMenuOption
-			).on(
+			)
+			.on(
 				"click",
 				{title: "Panel Left", callback: panelSplit.bind($(this), 1, 0)},
 				addContextMenuOption
-			).on(
+			)
+			.on(
 				"click",
 				{title: "Close Panel", callback: panelClose.bind($(this))},
 				addContextMenuOption
-			).on(
-  				"click", // click for timer
-  				{ title: "Timer", callback: function() {
-					addTimerTab.call($(this));
-				}},
-  				addContextMenuOption
 			);
 
 		// Add resizing functionality
