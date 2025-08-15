@@ -64,7 +64,8 @@ function tabBarCombine($retain, $lose) {
 /**
  * Adds a tab bar to an empty panel
  */
-function addTabBarToPanel() {
+
+/*function addTabBarToPanel() {
 	if ($(this).children("div." + classTabBar).length > 0)
 		return;
 
@@ -80,9 +81,34 @@ function addTabBarToPanel() {
 				).each(addTabBarFunctionality) // then add its functionality
 		).append(
 			$("<div>") // Also add tab document view
-				.addClass(classTabDocumentView)
+				.addClass(classTabDocumentView),
 		);
+} */
+
+
+function addTabBarToPanel() {
+    if ($(this).children("div." + classTabBar).length > 0)
+        return;
+
+    // Create the tab bar as a variable
+    const $tabBar = $("<div>")
+        .addClass(classTabBar)
+        .append(
+            $("<div>")
+                .addClass(classPanelContext)
+                .on("click", showContextMenu)
+        )
+        .each(addTabBarFunctionality); // then add its functionality
+
+    // Add the bookmark button
+    addBookmarkButtonToTabBar($tabBar);
+
+    // Append tab bar and document view to panel
+    $(this)
+        .append($tabBar)
+        .append($("<div>").addClass(classTabDocumentView));
 }
+
 
 /**
  * Check if a point is within the bounds of a block

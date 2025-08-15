@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  min-height: 300px; 
   box-sizing: border-box;
   font-family: 'Arial Rounded MT Bold', Arial Rounded, Arial, sans-serif;
   background-color: var(--background-color);
@@ -64,6 +65,7 @@ button#reset-btn:hover {
   background-color: var(--forground-subtle-color);
 }
 
+/* MOBILE / RESPONSIVE STYLING */
 @media (max-width: 600px) {
   #timer-display,
   #timer-input {
@@ -76,6 +78,30 @@ button#reset-btn:hover {
   button#reset-btn {
     font-size: 1rem;
     padding: 10px 20px;
-    margin: 0 5px;
+    margin: 5px 0; /* stack buttons vertically on small screens */
+    width: 80%; /* make buttons wider for touch */
+  }
+
+  .timer-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  #timer-display,
+  #timer-input {
+    font-size: 56px;
+    width: 180px;
+    padding: 10px 12px;
+  }
+
+  button#start-btn,
+  button#reset-btn {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    width: 90%;
   }
 }
