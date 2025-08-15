@@ -1,23 +1,29 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase/firebase';
 
 function DashboardNB () {
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            signOut(auth);
+            alert("You have been signed out successfully");
+            navigate("/");
+        } catch (error) {
+            console.error("Error signing out:", error);
+        }
+    };
+
     return (
         <header>
             <nav>
                 <ul id="navigation-container">
-                    <div className="links">
-                        <Link to ="/sign-up">
-                            <button>
-                                <span>SIGN-UP</span>
-                            </button>
-                        </Link>
-                        <Link to ="/log-in">
-                            <button>
-                                <span>LOG-OUT</span>
-                            </button>
-                        </Link>
-                    </div>
+                    <h3>Welcome, {auth.currentUser?.displayName}</h3>
+                    <button onClick={handleLogout}>
+                        LOG-OUT
+                    </button>
                 </ul>
             </nav>
         </header>

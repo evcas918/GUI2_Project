@@ -40,6 +40,14 @@ body {
   gap: 10px;
 }
 
+#navigation-container h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin-left: 10px;
+}
+
 #navigation-container button {
   background-color: lightslategray;
   color: whitesmoke;

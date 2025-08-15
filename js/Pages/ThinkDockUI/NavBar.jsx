@@ -17,11 +17,6 @@ function NavBar () {
                                 <span>LOG-IN</span>
                             </button>
                         </Link>
-                        <Link to ="/log-in">
-                            <button>
-                                <span>LOG-OUT</span>
-                            </button>
-                        </Link>
                     </div>
                 </ul>
             </nav>
