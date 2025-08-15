@@ -4,9 +4,12 @@ import App from './App.jsx'
 import LogIn from './Log-In/LogIn.jsx'
 import SignUpForm from './Registration/SignUpForm.jsx'
 import HomePage from './ThinkDockUI/HomePage.jsx'
+import WorkSpace from './Pages/WorkSpace.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Dashboard from './ThinkDockUI/Dashboard.jsx'
-import WorkSpace from './Pages/WorkSpace.jsx'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+
+const clientId = "516722635273-q40sofb87rde0p57oo1f13ljnh5c6ctm.apps.googleusercontent.com";
 
 const router = createBrowserRouter([
   {path:"/", element:<App/>},
@@ -18,5 +21,7 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById('root')).render(
-  <RouterProvider router={router}/>
+  <GoogleOAuthProvider clientId={clientId}>
+    <RouterProvider router={router}/>
+  </GoogleOAuthProvider>
 )
