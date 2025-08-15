@@ -73,14 +73,6 @@ function addTabBarToPanel() {
 		.append(
 			$("<div>")
 				.addClass(classTabBar)
-				// .append(
-				// 	$("<div>")
-				// 		.addClass(classButtonTabAdd)
-				// 		.append(
-				// 			$("<div>")
-				// 				.addClass(classIconAdd)
-				// 		)
-				// )
 				.append(
 					$("<div>")
 						.addClass(classPanelContext)

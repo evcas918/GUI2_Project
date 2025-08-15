@@ -41,6 +41,11 @@ $(document).ready(function() {
   				addContextMenuOption
 			)
 			.on(
+  				"click",
+  				{title: "Image Board", callback: addImageBoardTab.bind($(this))},
+  				addContextMenuOption
+			)
+			.on(
 				"click",
 				addContextMenuSpacer
 			)
@@ -68,7 +73,7 @@ $(document).ready(function() {
 				"click",
 				{title: "Close Panel", callback: panelClose.bind($(this))},
 				addContextMenuOption
-			);
+			)
 
 		// Add resizing functionality
 		$(this).siblings("div." + classPanelDivider)

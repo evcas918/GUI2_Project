@@ -62,6 +62,31 @@ body {
 	background-color: var(--background-color);
 }
 
+div.button-image-add {
+	display: block;
+
+	height: 25px;
+	width: 25px;
+
+	float: right;
+	margin: 25px;
+
+	border-radius: var(--tab-border-radius);
+	border: 2px solid var(--forground-color);
+
+	/*background-color: red;*/
+	background-image: url("../assets/image-add-icon.png");
+	background-repeat: no-repeat;
+	background-size: 25px 25px;
+	&:hover {
+		height: 31px;
+		width: 31px;
+		margin: 22px;
+		background-size: 31px 31px;
+		border-width: 2.5px;
+	}
+}
+
 div.panel-context {
 	display: block;
 

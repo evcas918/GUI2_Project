@@ -5,7 +5,3 @@ function addTextEditorTab() {
 
 	addTab($(this), "Text Editor", $textEditorEl);
 }
-
-$(document).ready(function() {
-	console.log("ready!");
-});
