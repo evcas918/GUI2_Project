@@ -2,74 +2,105 @@
   position: relative;
   overflow: auto; 
   height: 100%; 
-  max-height: calc(100vh - 80px); 
+  display: flex;
 }
 
-#calendar, .fc {
+.tab-content {
   width: 100%;
-  height: 100%; /* Makes calendar fill its container */
-  box-sizing: border-box; 
-  background-color: #191919;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
-
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
 }
 
-.tab-document-view {
-  overflow: hidden; 
-  height: 100%; 
-  display: flex; 
-  flex-direction: column; 
+#calendar {
+  background-color: #f7f8fa;
+  color: #333;
+  border-radius: 12px;
+  padding: 10px;
+  flex: 1 1 auto;
+  width: 100%;
+  font-family: "Inter", sans-serif;
 }
 
-/* Remove all borders first for regular calendar*/
-.fc .fc-daygrid-day,
-.fc .fc-daygrid-day-top,
-.fc .fc-col-header-cell {
-  border: none !important;
+/* Day cells */
+.fc-daygrid-day { background-color: #f7f8fa; border: 1px solid #e0e0e0; border-radius: 8px; transition: background-color 0.2s; }
+.fc-daygrid-day:hover { background-color: #e2e4e8; }
+
+/* Column headers */
+.fc-col-header-cell { background-color: #f0f1f3; color: #555; font-weight: 500; border-bottom: 1px solid #ddd; border-radius: 8px; }
+
+/* Event styling */
+.fc-event { font-weight: bold; font-size: 14px; border-radius: 8px; padding: 4px 6px; opacity: 0.85; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; }
+.fc-event:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+
+/* Buttons */
+.fc-button { display: inline-block; position: relative; cursor: pointer; min-height: 36px; min-width: 88px; line-height: 36px; text-align: center; border-radius: 4px; border: 0; padding: 0 12px; margin: 6px 4px; background: #fff; color: #333; font-weight: 500; text-transform: uppercase; font-size: 13px; transition: all 0.2s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+.fc-button:hover { background-color: #e0e0e0; }
+.fc-state-active { background-color: #cfd8dc; box-shadow: inset 0 1px 2px rgba(0,0,0,0.2); }
+
+/* Toolbar wrap on smaller screens */
+@media (max-width: 768px) { .fc-toolbar { flex-wrap: wrap; } }
+
+/* Modal */
+#eventModal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  align-items: center;    
+  justify-content: center; 
+  padding: 10px;
+}
+#eventModal .modal-content {
+  background-color: #1f1f1f;
+  border-radius: 16px;
+  padding: 24px;
+  width: auto;
+  max-width: 380px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-family: "Inter", sans-serif;
+  color: #fff;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+#eventModal #modalText { font-size: 16px; line-height: 1.5; text-align: center; }
+
+/* Input */
+#eventModal #modalInputContainer { display: none; width: 100%; margin-top: 12px; }
+#eventModal #modalInputContainer input { width: 100%; box-sizing: border-box; padding: 12px 14px; border-radius: 10px; border: 1px solid #444; background-color: #2a2a2a; color: #fff; font-size: 15px; outline: none; transition: all 0.2s ease; }
+#eventModal #modalInputContainer input:focus { border-color: #4a90e2; box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25); }
+
+/* Modal buttons */
+#eventModal .modal-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+#eventModal .modal-buttons button { padding: 10px 18px; border: none; border-radius: 12px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; min-width: 90px; }
+
+#addEventBtn { background-color: #4a90e2; color: #fff; }
+#addEventBtn:hover { background-color: #357ABD; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(74, 144, 226, 0.35); }
+
+#deleteEventsBtn { background-color: #e04a4a; color: #fff; }
+#deleteEventsBtn:hover { background-color: #b93636; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(224, 74, 74, 0.35); }
+
+#cancelBtn { background-color: #555; color: #fff; }
+#cancelBtn:hover { background-color: #333; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #calendar { padding: 5px; }
+  .fc-button { min-width: 60px; min-height: 28px; line-height: 28px; font-size: 11px; padding: 0 6px; margin: 4px 2px; }
 }
 
-/* Add border on right and bottom only */
-.fc .fc-daygrid-day,
-.fc .fc-daygrid-day-top,
-.fc .fc-col-header-cell {
-  border-right: 1px solid white !important;
-  border-bottom: 1px solid white !important;
+@media (max-width: 480px) {
+  #calendar { padding: 3px; }
+  .fc-button { min-width: 50px; min-height: 24px; line-height: 24px; font-size: 10px; padding: 0 4px; margin: 2px 1px; }
 }
 
-/* Add left border to the first column */
-.fc .fc-daygrid-body tr > td:first-child,
-.fc .fc-col-header > tr > th:first-child {
-  border-left: 1px solid white !important;
-}
-
-/* Add top border to the header row */
-.fc .fc-col-header {
-  border-top: 1px solid white !important;
-}
-
-/*------------------------------------------------------------------------------------- */
-
-/* Show day numbers in multiMonthYear view */
-.fc-multimonth .fc-daygrid-day-number {
-  display: block !important;
-  color: black !important;      
-  font-weight: normal !important; 
-  font-size: 1em !important;  
-  padding: 2px;                
-}
-
-
-/* Make the borders of the multiMonthYear month boxes black */
-.fc-multimonth .fc-daygrid-day-frame {
-  border: 1px solid black !important;
-}
-
-/* column headers border black */
-.fc-multimonth .fc-col-header-cell {
-  border-bottom: 1px solid black !important;
-}
-
-/* multiMonth container border black */
-.fc-multimonth {
-  border: 1px solid black !important;
+@media (max-width: 420px) {
+  #eventModal .modal-content { width: 90%; padding: 18px; gap: 14px; }
+  #eventModal .modal-buttons button { flex: 1 1 45%; min-width: auto; }
 }
