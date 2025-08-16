@@ -527,13 +527,14 @@ div.icon-close {
 }
 
 div.icon-hamburger {
-	display: block;
-
-	width: var(--icon-hamburger-size);
-	height: var(--icon-hamburger-size);
-
-	background-image: url('../assets/icon-hamburger.png');
-	background-size: var(--icon-hamburger-size) var(--icon-hamburger-size);
+  display: block;
+  width: var(--icon-hamburger-size);
+  height: var(--icon-hamburger-size);
+  background-image: url('../assets/icon-hamburger.png');
+  background-size: var(--icon-hamburger-size) var(--icon-hamburger-size);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #000; /* black square behind */
 }
 
 div.icon-logo {
