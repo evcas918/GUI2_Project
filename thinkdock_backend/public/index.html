@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ThinkDock</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="./css/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" href="./css/timer.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/calendar.css" />
+    <!-- Teammate auth styles (optional if you copied them to files) -->
+    <link rel="stylesheet" type="text/css" href="./css/login.css" />
+    <link rel="stylesheet" type="text/css" href="./css/signup.css" />
+
+    <!-- Firebase SDKs -->
+    <script defer src="/__/firebase/12.0.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.0.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/12.0.0/firebase-database-compat.js"></script>
+    <script defer src="/__/firebase/12.0.0/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/12.0.0/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/12.0.0/firebase-messaging-compat.js"></script>
+    <script defer src="/__/firebase/12.0.0/firebase-storage-compat.js"></script>
+    <script defer src="/__/firebase/12.0.0/firebase-analytics-compat.js"></script>
+    <script defer src="/__/firebase/12.0.0/firebase-remote-config-compat.js"></script>
+    <script defer src="/__/firebase/12.0.0/firebase-performance-compat.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
+
+    <!-- External libs -->
+    <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js"></script>
+
+    <!-- Internal scripts (order matters) -->
+    <script defer src="./js/context-menu.js"></script>
+    <script defer src="./js/sidebar.js"></script>
+    <script defer src="./js/timer.js"></script>
+    <script defer src="./js/text-editor.js"></script>
+    <script defer src="./js/panel.js"></script>
+    <script defer type="text/javascript" src="./js/image-board.js"></script>
+    <script defer src="./js/tab.js"></script>
+    <script defer src="./js/file-handle.js"></script>
+    <script defer src="./js/calendar.js"></script>
+
+    <!-- Auth fallback styles (match teammate look; safe to keep) -->
+    <style id="auth-fallback-css">
+      /* Hide any leftover close icon */
+      .auth-close { display: none; }
+
+      /* Fullscreen black overlay (support either structure) */
+      .login-container, .signup-container, .auth-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;               /* JS will set to 'flex' */
+        align-items: center;
+        justify-content: center;
+        background: #000;
+        z-index: 1000;
+      }
+
+      /* Card — support .auth-card wrapper or styling form directly */
+      .auth-overlay .auth-card,
+      .login-form,
+      .signup-form {
+        width: min(520px, 92vw);
+        background: #a9a9a9;
+        color: #111;
+        padding: 24px 28px;
+        border-radius: 10px;
+        box-shadow: 0 10px 24px rgba(0,0,0,.45);
+        font-family: "Courier New", Courier, monospace;
+        text-align: center;
+      }
+
+      /* Titles */
+      .auth-overlay .auth-card h2,
+      .login-form h2,
+      .signup-form h2 {
+        margin: 0 0 14px;
+        letter-spacing: 2px;
+        font-weight: 700;
+      }
+
+      /* Labels */
+      .auth-overlay .auth-card label,
+      .login-form label,
+      .signup-form label {
+        display: block;
+        text-align: left;
+        margin: 12px 0 6px;
+        letter-spacing: 1px;
+      }
+
+      /* Inputs */
+      .auth-overlay .auth-card input,
+      .login-form input,
+      .signup-form input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 6px;
+        border: 1px solid #d0d0d0;
+        background: #fff;
+        color: #000;
+      }
+
+      /* Buttons */
+      .btn-row { display:flex; gap:12px; justify-content:center; margin-top:12px; }
+      .auth-overlay .auth-card button,
+      .login-form button,
+      .signup-form button {
+        padding: 10px 14px;
+        min-width: 140px;
+        border-radius: 8px;
+        border: 1px solid #5e7487;
+        background: #6e879c;
+        color: #fff;
+        cursor: pointer;
+      }
+      .auth-overlay .auth-card button:hover,
+      .login-form button:hover,
+      .signup-form button:hover { filter: brightness(1.05); }
+
+      .auth-error { color:#ff7a7a; }
+    </style>
+
+    <!-- Remove double-card look: only the outer .auth-card is the card -->
+    <style>
+      .login-form, .signup-form { background: transparent; box-shadow: none; padding: 0; }
+      .btn-row { margin-top: 16px; }
+      .auth-footer { margin-top: 16px; }
+      .auth-footer a { color: #3b3bb5; text-decoration: underline; }
+    </style>
+
+    <!-- PDF resize fixes -->
+    <style>
+      /* Let content shrink/grow inside resizable panels */
+      .panel, .panel-root { min-height: 0; min-width: 0; }
+      .panel > * { min-height: 0; min-width: 0; }
+
+      /* Make embedded viewers fill their panel reliably */
+      .panel iframe,
+      .panel textarea,
+      .panel img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="context-menu"></div>
+
+    <div class="panel-root">
+      <div class="panel"></div>
+    </div>
+
+    <div class="sidebar">
+      <div class="sidebar-blur">
+        <div class="sidebar-options">
+          <div class="logo">
+            <div class="icon-logo"></div>
+            <div>Think<br />Dock</div>
+          </div>
+
+          <!-- Project Controls -->
+          <div class="project-controls" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <!-- Hide old button; keep hidden input -->
+              <input id="localFilePicker" type="file" accept=".pdf" multiple style="display:none;" />
+            </div>
+          </div>
+
+          <!-- Auto-populated via loadProjectList() -->
+          <div class="project-list" style="margin-top:12px; border-top:1px solid rgba(255,255,255,0.1); padding-top:8px;"></div>
+
+          <div class="button-sign-in-out">
+            <div class="icon-account"></div>
+            <div>Sign in</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-sidebar"><div class="icon-hamburger"></div></div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="auth-overlay login-container" style="display:none;">
+      <div class="auth-card">
+        <h2>Welcome back</h2>
+        <form id="login-form" class="login-form">
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" autocomplete="email" required />
+
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" autocomplete="current-password" required />
+
+          <div class="btn-row">
+            <button id="login-submit" type="submit">Log In</button>
+            <button id="login-google" type="button">Continue with Google</button>
+          </div>
+
+          <p class="auth-footer">No account? <a href="#" id="to-signup">Create one</a></p>
+          <p class="auth-error" id="login-error" hidden></p>
+        </form>
+      </div>
+    </div>
+
+    <!-- SIGNUP -->
+    <div class="auth-overlay signup-container" style="display:none;">
+      <div class="auth-card">
+        <h2>Create your account</h2>
+        <form id="signup-form" class="signup-form">
+          <label for="signup-email">Email</label>
+          <input id="signup-email" type="email" autocomplete="email" required />
+
+          <label for="signup-password">Password</label>
+          <input id="signup-password" type="password" autocomplete="new-password" minlength="6" required />
+
+          <div class="btn-row">
+            <button id="signup-submit" type="submit">Sign Up</button>
+            <button id="signup-google" type="button">Continue with Google</button>
+          </div>
+
+          <p class="auth-footer">Already registered? <a href="#" id="to-login">Log in</a></p>
+          <p class="auth-error" id="signup-error" hidden></p>
+        </form>
+      </div>
+    </div>
+
+    <!-- PDF repaint nudge (helps viewer repaint after panel resize) -->
+    <script>
+      (function () {
+        function nudgePdfIframes() {
+          document.querySelectorAll('.panel iframe').forEach((ifr) => {
+            const h = ifr.style.height || '100%';
+            ifr.style.height = '99.9%';
+            requestAnimationFrame(() => { ifr.style.height = h; });
+            try { if (ifr.contentWindow) ifr.contentWindow.dispatchEvent(new Event('resize')); } catch {}
+          });
+        }
+        document.addEventListener('mouseup', nudgePdfIframes); // after divider drag ends
+        window.addEventListener('resize', nudgePdfIframes);
+      })();
+    </script>
+
+    <!-- (+) menu item that triggers the hidden picker -->
+    <script defer src="./js/newtab-open-local.js"></script>
+
+    <!-- PDF-only uploader/opener (Firebase Storage) -->
+    <script defer src="./js/cloud-files.js"></script>
+
+    <!-- Auth wiring (shows login first when signed out) -->
+    <script defer src="./js/auth.js"></script>
+  </body>
+</html>

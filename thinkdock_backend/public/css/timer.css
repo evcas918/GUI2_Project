@@ -1,0 +1,81 @@
+.timer-container {
+  padding: 20px;
+  color: var(--forground-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  box-sizing: border-box;
+  font-family: 'Arial Rounded MT Bold', Arial Rounded, Arial, sans-serif;
+  background-color: var(--background-color);
+}
+
+#timer-display,
+#timer-input {
+  font-size: 96px;
+  font-weight: 700;
+  font-family: 'Arial Rounded MT', Arial Rounded, Arial, sans-serif;
+  width: 280px;
+  text-align: center;
+  background-color: var(--background-accent-color);
+  color: #fff;
+  border: 2.5px solid var(--background-accent-color);
+  border-radius: 6px;
+  padding: 15px 20px;
+  letter-spacing: 2px;
+  transition: border-color 0.3s ease;
+}
+
+#timer-display {
+  user-select: none;
+  cursor: pointer;
+}
+
+#timer-display:hover {
+  border-color: var(--forground-subtle-color);
+}
+
+#timer-input {
+  outline: none;
+  border: 2.5px solid var(--hover-color);
+  user-select: text;
+}
+
+button#start-btn,
+button#reset-btn {
+  background-color: var(--background-accent-color);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.25rem;
+  padding: 12px 30px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Arial Rounded MT', Arial Rounded, Arial, sans-serif;
+  user-select: none;
+  letter-spacing: 1px;
+}
+
+button#start-btn:hover,
+button#reset-btn:hover {
+  background-color: var(--forground-subtle-color);
+}
+
+@media (max-width: 600px) {
+  #timer-display,
+  #timer-input {
+    font-size: 72px;
+    width: 220px;
+    padding: 12px 16px;
+  }
+
+  button#start-btn,
+  button#reset-btn {
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin: 0 5px;
+  }
+}
