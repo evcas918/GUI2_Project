@@ -1,8 +1,3 @@
-/***************
- * ThinkDock Auth + Cloud Project I/O (Firebase compat)
- * Clean version — no jQuery override
- ***************/
-
 const classButtonSignInOut = "button-sign-in-out";
 const classIconAccount = "icon-account";
 
@@ -75,7 +70,6 @@ window.googleLogout = googleLogout;
     data.tabs.forEach((t, idx) => {
       window.createPanel(t.panelId, t.content);
 
-      // Use jQuery if available (your app does)
       const $newTab = (typeof window.newTab === "function")
         ? window.newTab(t.title, window.jQuery("<div>"))
         : window.jQuery("<div>").addClass("tab").text(t.title);
@@ -141,7 +135,6 @@ window.googleLogout = googleLogout;
     await loadProjectList();
   }
 
-  // Expose for inline
   window.saveProject = saveProject;
   window.loadProject = loadProject;
   window.loadProjectList = loadProjectList;
@@ -150,7 +143,6 @@ window.googleLogout = googleLogout;
 
 // ------- Modal forms (email/password + Google) -------
 function wireAuthForms() {
-  // Switch links
   document.getElementById("to-signup")?.addEventListener("click", (e) => {
     e.preventDefault(); hideSel(".login-container"); showSel(".signup-container");
   });
@@ -199,7 +191,6 @@ function wireAuthForms() {
   });
 }
 
-// ------- Header button bind (uses jQuery, now safe) -------
 function bindHeaderAuthButton(user) {
   const $btn = window.jQuery ? window.jQuery("div." + classButtonSignInOut) : null;
   if (!$btn || !$btn.length) return;

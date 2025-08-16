@@ -1,6 +1,3 @@
-// PDF-only uploader/opener using Firebase Storage (compat SDK).
-// Requires: jQuery, addTab(), and a hidden <input id="localFilePicker">.
-
 (function () {
   const auth = firebase.auth();
   const storage = firebase.storage();
@@ -26,7 +23,6 @@
     const user = auth.currentUser;
     if (!user) { alert("Please sign in first."); return; }
 
-    // sanity: make sure it's a PDF (type can be empty; also check extension)
     const lower = (file.name || "").toLowerCase();
     const looksPdf = (file.type === "application/pdf") || lower.endsWith(".pdf");
     if (!looksPdf) { alert("Only PDF files are supported right now."); return; }
@@ -42,12 +38,10 @@
       task.on("state_changed", null, reject, resolve);
     });
 
-    // Fresh download URL
     const url = await ref.getDownloadURL();
     openPdfTab(file.name, url);
   }
 
-  // ---- handle selection from <input type="file"> ----
   async function handleFiles(files) {
     for (const f of files) {
       try { await uploadAndOpenPdf(f); }
@@ -58,7 +52,6 @@
     }
   }
 
-  // ---- wire the hidden picker (always) ----
   document.addEventListener("DOMContentLoaded", () => {
     const picker = document.getElementById("localFilePicker");
     if (!picker) {
@@ -71,7 +64,6 @@
       picker.value = ""; // allow re-selecting same file again
     });
 
-    // If you still have the old sidebar button, this keeps it working too (optional)
     const btn = document.getElementById("btnOpenLocalFiles");
     if (btn) btn.addEventListener("click", () => picker.click());
   });
